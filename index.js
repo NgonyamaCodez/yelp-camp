@@ -24,29 +24,32 @@ const campgroundRoutes = require("./routes/campground.js");
 const reviewRoutes = require("./routes/reviews.js");
 const MongoStore = require('connect-mongo');
 
-const DB_URL = process.env.MONGODB_URI || "mongodb://localhost:27017/yelp-camp"
+const DB_URL = process.env.MONGODB_URI;
+if (!DB_URL) {
+  console.error("FATAL: MONGODB_URI environment variable not configured");
+  process.exit(1);
+}
 //const dbUrl = "mongodb://localhost:27017/yelp-camp"
 
 
 // Modern connection with proper error handling
 mongoose.connect(DB_URL, {
-  serverSelectionTimeoutMS: 5000, // Timeout after 5 seconds instead of 30
-  socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+  serverSelectionTimeoutMS: 5000, // Fail fast if no primary server available
+  socketTimeoutMS: 30000, // Close idle connections after 30 seconds
 })
-.then(() => {
-  console.log("Database connected");
-})
+.then(() => console.log("✅ Successfully connected to MongoDB Atlas"))
 .catch(err => {
-  console.error("Initial database connection error:", err);
-  process.exit(1); // Exit if initial connection fails
+  console.error("❌ MongoDB connection failed:", err.message);
+  process.exit(1);
 });
 
 const db = mongoose.connection;
-db.on("error", err => {
-  console.error("Database connection error:", err);
+mongoose.connection.on('error', err => {
+  console.error('MongoDB connection error:', err.message);
 });
-db.on("disconnected", () => {
-  console.warn("Database disconnected");
+
+mongoose.connection.on('disconnected', () => {
+  console.warn('MongoDB connection lost');
 });
 
 const app = express();
