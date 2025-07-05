@@ -52,7 +52,7 @@ db.on("disconnected", () => {
 const app = express();
 
 const store = MongoStore.create({
-    mongoUrl: dbUrl,
+    mongoUrl: DB_URL,
     touchAfter: 24 * 60 * 60,
     crypto: {
         secret: 'thisshouldbeaseret'
