@@ -24,20 +24,29 @@ const campgroundRoutes = require("./routes/campground.js");
 const reviewRoutes = require("./routes/reviews.js");
 const MongoStore = require('connect-mongo');
 
-const dbUrl = "mongodb://localhost:27017/yelp-camp"
+const DB_URL = process.env.MONGODB_URI || "mongodb://localhost:27017/yelp-camp"
 //const dbUrl = "mongodb://localhost:27017/yelp-camp"
 
 
-mongoose.connect(dbUrl,{
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+// Modern connection with proper error handling
+mongoose.connect(DB_URL, {
+  serverSelectionTimeoutMS: 5000, // Timeout after 5 seconds instead of 30
+  socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+})
+.then(() => {
+  console.log("Database connected");
+})
+.catch(err => {
+  console.error("Initial database connection error:", err);
+  process.exit(1); // Exit if initial connection fails
 });
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error: "));
-db.once("open", () => {
-  console.log("Datebase connected");
 
-const campground = require('./model/campground.js')
+const db = mongoose.connection;
+db.on("error", err => {
+  console.error("Database connection error:", err);
+});
+db.on("disconnected", () => {
+  console.warn("Database disconnected");
 });
 
 const app = express();
