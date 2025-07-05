@@ -1,0 +1,53 @@
+<% layout('layout/boilerplate') %>
+<div class="container d-flex justify-content-center align-items-center mt-5">
+  <div class="card shadow" style="width: 18rem">
+    <img
+      src="https://images.unsplash.com/photo-1532260024168-bcd6be5dc240?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTI3fHx0ZW50fGVufDB8fDB8fHww"
+      class="card-img-top"
+      alt="..."
+    />
+    <div class="card-body">
+      <h5 class="card-title">Register</h5>
+      <form action="/register" class="validated-form" method="POST">
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            class="form-control"
+            required,
+            autofocus
+          />
+          <div class="valid-feedback">looks good</div>
+        </div>
+        <div class="mb-3">
+          <label for="username" class="form-label">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-control"
+            required
+          />
+          <div class="valid-feedback">looks good</div>
+        </div>
+        <div class="mb-3">
+          <label for="username" class="form-label">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-control"
+            required
+          />
+          <div class="valid-feedback">looks good</div>
+        </div>
+        <button class="btn btn-success">Register</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
